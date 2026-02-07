@@ -1,0 +1,26 @@
+{
+  "name": "informative-blog",
+  "version": "1.0.0",
+  "description": "A MERN stack informative blog application",
+  "main": "server/server.js",
+  "scripts": {
+    "server": "cd server && node server.js",
+    "client": "cd client && npm start",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "install-all": "npm install && cd server && npm install && cd ../client && npm install",
+    "build": "cd client && npm run build",
+    "build:server": "cd server && npm install --production",
+    "deploy:vercel": "cd client && vercel --prod",
+    "deploy:netlify": "cd client && netlify deploy --prod",
+    "docker:build": "docker-compose build",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f"
+  },
+  "keywords": ["mern", "blog", "react", "mongodb", "express"],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
