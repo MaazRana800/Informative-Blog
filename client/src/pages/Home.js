@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import API_URL from '../config/api';
 import { Calendar, User, Eye, Heart, ArrowRight } from 'lucide-react';
 import { format } from 'date-fns';
 import './Home.css';
@@ -24,7 +25,7 @@ const Home = () => {
       const params = { page: currentPage, limit: 9 };
       if (selectedCategory) params.category = selectedCategory;
       
-      const response = await axios.get('/api/posts', { params });
+      const response = await axios.get(`${API_URL}/api/posts`, { params });
       setPosts(response.data.posts);
       setTotalPages(response.data.totalPages);
     } catch (error) {
@@ -36,7 +37,7 @@ const Home = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get('/api/categories');
+      const response = await axios.get(`${API_URL}/api/categories`);
       setCategories(response.data);
     } catch (error) {
       console.error('Failed to fetch categories:', error);

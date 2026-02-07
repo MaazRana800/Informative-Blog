@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import API_URL from '../config/api';
 import { useAuth } from '../context/AuthContext';
 import { User, Mail, Calendar, Edit, Trash2 } from 'lucide-react';
 import { format } from 'date-fns';
@@ -17,7 +18,7 @@ const Profile = () => {
 
   const fetchUserPosts = async () => {
     try {
-      const response = await axios.get('/api/posts', {
+      const response = await axios.get(`${API_URL}/api/posts`, {
         params: { published: 'all' }
       });
       const userPosts = response.data.posts.filter(post => post.author._id === user.id);
@@ -32,7 +33,7 @@ const Profile = () => {
   const handleDelete = async (postId) => {
     if (window.confirm('Are you sure you want to delete this post?')) {
       try {
-        await axios.delete(`/api/posts/${postId}`);
+        await axios.delete(`${API_URL}/api/posts/${postId}`);
         setPosts(posts.filter(post => post._id !== postId));
       } catch (error) {
         console.error('Failed to delete post:', error);

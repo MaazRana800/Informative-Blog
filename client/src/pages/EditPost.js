@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import API_URL from '../config/api';
 import { Save, ArrowLeft } from 'lucide-react';
 import './PostForm.css';
 
@@ -26,7 +27,7 @@ const EditPost = () => {
 
   const fetchPost = async () => {
     try {
-      const response = await axios.get(`/api/posts/${id}`);
+      const response = await axios.get(`${API_URL}/api/posts/${id}`);
       const post = response.data;
       setTitle(post.title);
       setContent(post.content);
@@ -45,7 +46,7 @@ const EditPost = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get('/api/categories');
+      const response = await axios.get(`${API_URL}/api/categories`);
       setCategories(response.data);
     } catch (error) {
       console.error('Failed to fetch categories:', error);
@@ -74,7 +75,7 @@ const EditPost = () => {
         published
       };
 
-      const response = await axios.put(`/api/posts/${id}`, postData);
+      const response = await axios.put(`${API_URL}/api/posts/${id}`, postData);
       navigate(`/post/${response.data.slug}`);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to update post');

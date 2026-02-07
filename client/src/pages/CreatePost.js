@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import API_URL from '../config/api';
 import { Save, ArrowLeft } from 'lucide-react';
 import './PostForm.css';
 
@@ -23,7 +24,7 @@ const CreatePost = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get('/api/categories');
+      const response = await axios.get(`${API_URL}/api/categories`);
       setCategories(response.data);
     } catch (error) {
       console.error('Failed to fetch categories:', error);
@@ -52,7 +53,7 @@ const CreatePost = () => {
         published
       };
 
-      const response = await axios.post('/api/posts', postData);
+      const response = await axios.post(`${API_URL}/api/posts`, postData);
       navigate(`/post/${response.data.slug}`);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to create post');

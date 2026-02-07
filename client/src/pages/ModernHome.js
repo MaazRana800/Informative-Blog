@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import API_URL from '../config/api';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
@@ -48,7 +49,7 @@ const ModernHome = () => {
     try {
       const params = { page: 1, limit: 6 };
       if (selectedCategory) params.category = selectedCategory;
-      const response = await axios.get('/api/posts', { params });
+      const response = await axios.get(`${API_URL}/api/posts`, { params });
       setPosts(response.data.posts);
     } catch (error) {
       console.error('Failed to fetch posts:', error);
@@ -57,7 +58,7 @@ const ModernHome = () => {
 
   const fetchNews = async () => {
     try {
-      const response = await axios.get('/api/external/news', {
+      const response = await axios.get(`${API_URL}/api/external/news`, {
         params: { category: 'technology' }
       });
       setNewsArticles(response.data.articles.slice(0, 6));
@@ -68,7 +69,7 @@ const ModernHome = () => {
 
   const fetchWikipedia = async () => {
     try {
-      const response = await axios.get('/api/external/wikipedia', {
+      const response = await axios.get(`${API_URL}/api/external/wikipedia`, {
         params: { query: 'Artificial Intelligence Technology' }
       });
       setWikiArticles(response.data.articles);
@@ -79,7 +80,7 @@ const ModernHome = () => {
 
   const fetchEvents = async () => {
     try {
-      const response = await axios.get('/api/external/tech-events');
+      const response = await axios.get(`${API_URL}/api/external/tech-events`);
       setEvents(response.data.events);
     } catch (error) {
       console.error('Failed to fetch events:', error);
@@ -88,7 +89,7 @@ const ModernHome = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get('/api/categories');
+      const response = await axios.get(`${API_URL}/api/categories`);
       setCategories(response.data);
     } catch (error) {
       console.error('Failed to fetch categories:', error);

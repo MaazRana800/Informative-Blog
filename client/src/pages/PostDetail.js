@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import API_URL from '../config/api';
 import { Calendar, User, Eye, Heart, Edit, Trash2, ArrowLeft } from 'lucide-react';
 import { format } from 'date-fns';
 import { useAuth } from '../context/AuthContext';
@@ -22,7 +23,7 @@ const PostDetail = () => {
   const fetchPost = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`/api/posts/${slug}`);
+      const response = await axios.get(`${API_URL}/api/posts/${slug}`);
       setPost(response.data);
       setLikesCount(response.data.likes?.length || 0);
       if (user) {
@@ -42,7 +43,7 @@ const PostDetail = () => {
     }
 
     try {
-      const response = await axios.post(`/api/posts/${post._id}/like`);
+      const response = await axios.post(`${API_URL}/api/posts/${post._id}/like`);
       setLiked(response.data.liked);
       setLikesCount(response.data.likes);
     } catch (error) {
@@ -53,7 +54,7 @@ const PostDetail = () => {
   const handleDelete = async () => {
     if (window.confirm('Are you sure you want to delete this post?')) {
       try {
-        await axios.delete(`/api/posts/${post._id}`);
+        await axios.delete(`${API_URL}/api/posts/${post._id}`);
         navigate('/');
       } catch (error) {
         console.error('Failed to delete post:', error);

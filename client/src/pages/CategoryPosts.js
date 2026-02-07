@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
+import API_URL from '../config/api';
 import { Calendar, User, Eye, Heart, ArrowRight, ArrowLeft } from 'lucide-react';
 import { format } from 'date-fns';
 import './Home.css';
@@ -18,10 +19,10 @@ const CategoryPosts = () => {
   const fetchCategoryAndPosts = async () => {
     try {
       setLoading(true);
-      const categoryResponse = await axios.get(`/api/categories/${slug}`);
+      const categoryResponse = await axios.get(`${API_URL}/api/categories/${slug}`);
       setCategory(categoryResponse.data);
 
-      const postsResponse = await axios.get('/api/posts', {
+      const postsResponse = await axios.get(`${API_URL}/api/posts`, {
         params: { category: categoryResponse.data._id }
       });
       setPosts(postsResponse.data.posts);
