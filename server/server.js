@@ -22,7 +22,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static('uploads'));
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/informative-blog')
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/informative-blog', {
+  serverSelectionTimeoutMS: 5000,
+  socketTimeoutMS: 45000,
+  bufferMaxEntries: 0,
+  bufferCommands: false
+})
 .then(() => console.log('MongoDB connected successfully'))
 .catch((err) => console.error('MongoDB connection error:', err));
 
