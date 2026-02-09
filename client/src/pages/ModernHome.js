@@ -12,6 +12,7 @@ import {
   BookOpen, Brain, Cpu, Rocket
 } from 'lucide-react';
 import { format } from 'date-fns';
+import NewsletterSignup from '../components/NewsletterSignup';
 import './ModernHome.css';
 
 const ModernHome = () => {
@@ -526,6 +527,24 @@ const ModernHome = () => {
                 {index < events.length - 1 && <div className="timeline-connector"></div>}
               </motion.div>
             ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Newsletter Section */}
+      <section className="section newsletter-section">
+        <div className="container">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <NewsletterSignup 
+              title="🚀 Get Weekly Tech Insights"
+              description="Join 10,000+ developers receiving the latest tutorials, industry news, and exclusive content every week."
+              className="newsletter-homepage"
+            />
           </motion.div>
         </div>
       </section>

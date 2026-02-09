@@ -797,3 +797,25 @@
     font-size: 2rem;
   }
 }
+
+/* Newsletter Section */
+.newsletter-section {
+  padding: 4rem 0;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+.newsletter-homepage {
+  max-width: 600px;
+  margin: 0 auto;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.2);
+}
+
+@media (max-width: 768px) {
+  .newsletter-section {
+    padding: 3rem 0;
+  }
+  
+  .newsletter-homepage {
+    margin: 0 1rem;
+  }
+}
