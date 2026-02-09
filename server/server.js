@@ -22,14 +22,47 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static('uploads'));
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/informative-blog')
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/informative-blog', {
+  serverSelectionTimeoutMS: 15000,
+  socketTimeoutMS: 45000,
+  maxPoolSize: 10,
+  retryWrites: true,
+  w: 'majority'
+})
 .then(() => console.log('MongoDB connected successfully'))
-.catch((err) => console.error('MongoDB connection error:', err));
+.catch((err) => {
+  console.error('MongoDB connection error:', err);
+  console.log('Retrying connection in 5 seconds...');
+  setTimeout(() => {
+    mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/informative-blog')
+      .then(() => console.log('MongoDB connected on retry'))
+      .catch((retryErr) => console.error('MongoDB retry failed:', retryErr));
+  }, 5000);
+});
 
 const authRoutes = require('./routes/auth');
 const postRoutes = require('./routes/posts');
 const categoryRoutes = require('./routes/categories');
 const externalRoutes = require('./routes/external');
+
+// MongoDB connection status endpoint
+app.get('/api/status', (req, res) => {
+  const mongoState = mongoose.connection.readyState;
+  const mongoStates = {
+    0: 'disconnected',
+    1: 'connected',
+    2: 'connecting',
+    3: 'disconnecting'
+  };
+  
+  res.json({
+    mongodb: {
+      status: mongoStates[mongoState],
+      readyState: mongoState
+    },
+    server: 'running'
+  });
+});
 
 app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
