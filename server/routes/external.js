@@ -2,6 +2,12 @@ const express = require('express');
 const router = express.Router();
 const axios = require('axios');
 
+// Function to clean HTML tags from text
+const cleanHtml = (text) => {
+  if (!text) return '';
+  return text.replace(/<[^>]*>/g, '').replace(/&quot;/g, '"').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&#39;/g, "'");
+};
+
 router.get('/news', async (req, res) => {
   try {
     const { category = 'technology', page = 1 } = req.query;
@@ -64,10 +70,10 @@ router.get('/wikipedia', async (req, res) => {
     
     const articles = searchResults.map(item => ({
       title: item.title,
-      extract: item.snippet || 'No excerpt available',
+      extract: cleanHtml(item.snippet) || 'No excerpt available',
       url: `https://en.wikipedia.org/?curid=${item.pageid}`,
       image: null, // Skip images to avoid additional API calls
-      snippet: item.snippet
+      snippet: cleanHtml(item.snippet)
     }));
 
     res.json({ articles });
