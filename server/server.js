@@ -1,7 +1,10 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const dotenv = require('dotenv');
+const rateLimit = require('express-rate-limit');
+const helmet = require('helmet');
+const mongoSanitize = require('express-mongo-sanitize');
+require('dotenv').config();
 
 dotenv.config();
 
@@ -18,9 +21,62 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use('/uploads', express.static('uploads'));
+
+// Security middleware
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+      fontSrc: ["'self'", "https://fonts.gstatic.com"],
+      imgSrc: ["'self'", "data:", "https:", "http:"],
+      scriptSrc: ["'self'"],
+      connectSrc: ["'self'", "https://railway.app", "https://vercel.app"],
+    },
+  },
+}));
+
+// Rate limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: {
+    error: 'Too many requests from this IP, please try again later.'
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+app.use('/api/', limiter);
+
+// Data sanitization
+app.use(mongoSanitize());
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// Static files with caching
+app.use('/uploads', express.static('uploads', {
+  maxAge: '1d', // Cache for 1 day
+  etag: true,
+  lastModified: true
+}));
+
+// Performance headers
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  
+  // Cache control for API responses
+  if (req.path.startsWith('/api/external/')) {
+    res.setHeader('Cache-Control', 'public, max-age=300'); // 5 minutes for external APIs
+  } else if (req.path.startsWith('/api/posts') || req.path.startsWith('/api/categories')) {
+    res.setHeader('Cache-Control', 'public, max-age=60'); // 1 minute for posts/categories
+  }
+  
+  next();
+});
 
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/informative-blog', {
   serverSelectionTimeoutMS: 15000,
@@ -44,6 +100,7 @@ const authRoutes = require('./routes/auth');
 const postRoutes = require('./routes/posts');
 const categoryRoutes = require('./routes/categories');
 const externalRoutes = require('./routes/external');
+const sitemapRoutes = require('./routes/sitemap');
 
 // MongoDB connection status endpoint
 app.get('/api/status', (req, res) => {
@@ -68,6 +125,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/external', externalRoutes);
+app.use('/api/sitemap', sitemapRoutes);
 
 app.get('/', (req, res) => {
   res.json({ 
