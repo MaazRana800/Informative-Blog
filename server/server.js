@@ -70,7 +70,11 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api/external', externalRoutes);
 
 app.get('/', (req, res) => {
-  res.json({ message: 'Welcome to Informative Blog API' });
+  res.json({ 
+    message: 'Welcome to Informative Blog API',
+    timestamp: new Date().toISOString(),
+    status: 'operational'
+  });
 });
 
 const PORT = process.env.PORT || 5000;
