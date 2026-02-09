@@ -1,6 +1,9 @@
 {
   "version": 2,
   "name": "informative-blog",
+  "env": {
+    "REACT_APP_API_URL": "https://informative-blog-web-production-bfbe.up.railway.app"
+  },
   "builds": [
     {
       "src": "client/package.json",
