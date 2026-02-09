@@ -1,1 +1,1 @@
-google.com, pub-YOUR-PUBLISHER-ID, DIRECT, f08c47fec0942fa0
+google.com, pub-5984996181039634, DIRECT, f08c47fec0942fa0

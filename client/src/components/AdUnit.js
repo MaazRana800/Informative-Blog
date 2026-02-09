@@ -11,7 +11,7 @@ const AdUnit = ({
     // Load AdSense script if not already loaded
     if (!window.adsbygoogle) {
       const script = document.createElement('script');
-      script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR-PUBLISHER-ID';
+      script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5984996181039634';
       script.async = true;
       script.crossOrigin = 'anonymous';
       document.head.appendChild(script);
@@ -36,7 +36,7 @@ const AdUnit = ({
       <ins
         className="adsbygoogle"
         style={defaultStyle}
-        data-ad-client="ca-pub-YOUR-PUBLISHER-ID"
+        data-ad-client="ca-pub-5984996181039634"
         data-ad-slot={slot}
         data-ad-format={format}
         data-full-width-responsive={responsive === 'true'}
