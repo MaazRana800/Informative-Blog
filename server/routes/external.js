@@ -45,6 +45,9 @@ router.get('/wikipedia', async (req, res) => {
         format: 'json',
         origin: '*',
         srlimit: 5
+      },
+      headers: {
+        'User-Agent': 'Informative-Blog-App/1.0'
       }
     });
 
@@ -61,6 +64,9 @@ router.get('/wikipedia', async (req, res) => {
             pithumbsize: 500,
             format: 'json',
             origin: '*'
+          },
+          headers: {
+            'User-Agent': 'Informative-Blog-App/1.0'
           }
         });
 
@@ -78,6 +84,7 @@ router.get('/wikipedia', async (req, res) => {
     res.json({ articles });
   } catch (error) {
     console.error('Wikipedia API error:', error.message);
+    console.error('Wikipedia API details:', error.response?.data || 'No response data');
     res.json({ articles: [] });
   }
 });
