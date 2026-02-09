@@ -104,6 +104,7 @@ const sitemapRoutes = require('./routes/sitemap');
 const profileRoutes = require('./routes/profiles');
 const commentRoutes = require('./routes/comments');
 const searchRoutes = require('./routes/search');
+const newsletterRoutes = require('./routes/newsletter');
 
 // MongoDB connection status endpoint
 app.get('/api/status', (req, res) => {
@@ -132,6 +133,7 @@ app.use('/api/sitemap', sitemapRoutes);
 app.use('/api/profiles', profileRoutes);
 app.use('/api/comments', commentRoutes);
 app.use('/api/search', searchRoutes);
+app.use('/api/newsletter', newsletterRoutes);
 
 app.get('/', (req, res) => {
   res.json({ 
