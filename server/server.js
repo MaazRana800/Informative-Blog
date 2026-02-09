@@ -101,6 +101,9 @@ const postRoutes = require('./routes/posts');
 const categoryRoutes = require('./routes/categories');
 const externalRoutes = require('./routes/external');
 const sitemapRoutes = require('./routes/sitemap');
+const profileRoutes = require('./routes/profiles');
+const commentRoutes = require('./routes/comments');
+const searchRoutes = require('./routes/search');
 
 // MongoDB connection status endpoint
 app.get('/api/status', (req, res) => {
@@ -126,6 +129,9 @@ app.use('/api/posts', postRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/external', externalRoutes);
 app.use('/api/sitemap', sitemapRoutes);
+app.use('/api/profiles', profileRoutes);
+app.use('/api/comments', commentRoutes);
+app.use('/api/search', searchRoutes);
 
 app.get('/', (req, res) => {
   res.json({ 
