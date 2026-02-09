@@ -22,19 +22,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static('uploads'));
 
-// MongoDB connection check middleware
-app.use((req, res, next) => {
-  if (mongoose.connection.readyState !== 1) {
-    return res.status(503).json({ message: 'Database not connected' });
-  }
-  next();
-});
-
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/informative-blog', {
-  serverSelectionTimeoutMS: 10000,
-  socketTimeoutMS: 45000,
-  bufferMaxEntries: 0
-})
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/informative-blog')
 .then(() => console.log('MongoDB connected successfully'))
 .catch((err) => console.error('MongoDB connection error:', err));
 
