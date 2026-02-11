@@ -139,11 +139,41 @@ app.get('/', (req, res) => {
   res.json({ 
     message: 'Welcome to Informative Blog API',
     timestamp: new Date().toISOString(),
-    status: 'operational'
+    status: 'operational',
+    version: '2.0.0'
+  });
+});
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+  const mongoState = mongoose.connection.readyState;
+  const mongoStates = {
+    0: 'disconnected',
+    1: 'connected',
+    2: 'connecting',
+    3: 'disconnecting'
+  };
+  
+  res.json({
+    status: 'healthy',
+    mongodb: {
+      status: mongoStates[mongoState],
+      readyState: mongoState
+    },
+    server: 'running',
+    timestamp: new Date().toISOString()
   });
 });
 
 const PORT = process.env.PORT || 5000;
+
+// Start server with error handling
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`🚀 Server is running on port ${PORT}`);
+  console.log(`📊 Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`🌐 API URL: http://localhost:${PORT}`);
+  console.log(`💾 MongoDB URI: ${process.env.MONGODB_URI ? 'configured' : 'using default'}`);
+}).on('error', (err) => {
+  console.error('❌ Server startup error:', err);
+  process.exit(1);
 });
