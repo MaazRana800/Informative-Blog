@@ -7,7 +7,9 @@ services:
     plan: free
     buildCommand: cd server && npm install
     startCommand: cd server && npm start
-    healthCheckPath: /
+    healthCheckPath: /health
+    healthCheckGracePeriod: 60
+    autoDeploy: true
     envVars:
       - key: PORT
         value: 5000
@@ -20,7 +22,7 @@ services:
       - key: NEWS_API_KEY
         sync: false
       - key: CLIENT_URL
-        sync: false
+        value: https://informative-blog-web.onrender.com
 
   # Frontend Static Site
   - type: web
@@ -28,9 +30,10 @@ services:
     env: static
     region: oregon
     plan: free
-    buildCommand: cd client && npm install && REACT_APP_API_URL=$API_URL npm run build
+    buildCommand: cd client && npm install && REACT_APP_API_URL=https://informative-blog-api.onrender.com npm run build
     staticPublishPath: client/build
     pullRequestPreviewsEnabled: true
+    autoDeploy: true
     headers:
       - path: /*
         name: X-Frame-Options
@@ -38,7 +41,16 @@ services:
       - path: /*
         name: X-Content-Type-Options
         value: nosniff
+      - path: /*
+        name: X-XSS-Protection
+        value: "1; mode=block"
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
     routes:
+      - type: rewrite
+        source: /api/*
+        destination: https://informative-blog-api.onrender.com/api/*
       - type: rewrite
         source: /*
         destination: /index.html
