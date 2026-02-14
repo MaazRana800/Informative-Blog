@@ -2,9 +2,16 @@
   base = "client"
   command = "npm run build"
   publish = "build"
+  functions = "../netlify/functions"
 
 [build.environment]
   NODE_VERSION = "18"
+  REACT_APP_API_URL = "/.netlify/functions"
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat"
+  status = 200
 
 [[redirects]]
   from = "/*"
@@ -18,3 +25,7 @@
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
